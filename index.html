@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интересный сайт</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s;
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #intro {
+            font-size: 24px;
+        }
+        #startButton {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #screamer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="intro">
+            <h1>Нажмите, чтобы увидеть кое-что интересное</h1>
+            <button id="startButton">Начать</button>
+        </div>
+    </div>
+
+    <div id="screamer"></div>
+
+    <audio id="screamSound" src="https://zvukipro.com/index.php?do=download&id=16936" preload="auto"></audio>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const intro = document.getElementById('intro');
+        const screamer = document.getElementById('screamer');
+        const screamSound = document.getElementById('screamSound');
+        const body = document.body;
+
+        startButton.addEventListener('click', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+            
+            intro.style.display = 'none';
+
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
+            // Запускаем скример с задержкой в 500 миллисекунд (0.5 секунды)
+            setTimeout(triggerScreamer, 500);
+        });
+
+        function triggerScreamer() {
+            body.style.backgroundColor = '#000';
+            screamer.style.display = 'block';
+            screamSound.play();
+        }
+    </script>
+
+</body>
+</html>
