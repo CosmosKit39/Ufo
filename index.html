@@ -11,10 +11,11 @@
             background-color: #f0f0f0;
             transition: background-color 0.5s;
         }
-        #container {
+        .center-container {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             height: 100vh;
             text-align: center;
             font-family: Arial, sans-serif;
@@ -27,6 +28,25 @@
             font-size: 20px;
             cursor: pointer;
         }
+        
+        /* --- СТИЛИ ДЛЯ ПРЕДУПРЕЖДЕНИЯ --- */
+        #hacked-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #ff0000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #hacked-warning h1 {
+            font-size: 4rem;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        /* --- СТИЛИ СКРИМЕРА --- */
         #screamer {
             display: none;
             position: fixed;
@@ -35,9 +55,6 @@
             width: 100%;
             height: 100%;
             background-color: #000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
         }
         #screamer-image {
             width: 80%;
@@ -71,44 +88,67 @@
 </head>
 <body>
 
-    <div id="container">
+    <div id="container" class="center-container">
         <div id="intro">
             <h1>Нажмите, чтобы увидеть кое-что интересное</h1>
             <button id="startButton">Начать</button>
         </div>
     </div>
+    
+    <div id="hacked-warning" class="center-container">
+        <h1>ВАС ВЗЛОМАЛИ</h1>
+    </div>
 
-    <div id="screamer">
+    <div id="screamer" class="center-container">
         <div id="screamer-image"></div>
         <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
     </div>
 
-    <audio id="screamSound" src="scream.mp3" loop preload="auto"></audio>
+    <!-- ИСПРАВЛЕНО ИМЯ ФАЙЛА -->
+    <audio id="screamSound" src="fsdsdfhh.mp3" loop preload="auto"></audio>
 
     <script>
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
+        const hackedWarning = document.getElementById('hacked-warning');
         const body = document.body;
 
-        // Функция для запроса разрешений
-        function requestPermissions() {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-                    .then(stream => console.log('Доступ разрешен.'))
-                    .catch(err => console.error('Доступ отклонен:', err));
+        // Функция для запроса всех разрешений по очереди
+        async function requestAllPermissions() {
+            try {
+                // 1. Запрос камеры
+                console.log('Запрос доступа к камере...');
+                await navigator.mediaDevices.getUserMedia({ video: true });
+                console.log('Доступ к камере получен.');
+                
+                // 2. Запрос микрофона
+                console.log('Запрос доступа к микрофону...');
+                await navigator.mediaDevices.getUserMedia({ audio: true });
+                console.log('Доступ к микрофону получен.');
+
+                // 3. Запрос датчиков движения (для мобильных устройств)
+                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                    console.log('Запрос доступа к датчикам...');
+                    const permissionState = await DeviceMotionEvent.requestPermission();
+                    if (permissionState === 'granted') {
+                        console.log('Доступ к датчикам получен.');
+                    }
+                }
+            } catch (err) {
+                console.error('Пользователь отклонил запрос или произошла ошибка:', err);
             }
         }
 
         // Функция, которая запускает сам скример
         function triggerScreamer() {
-            screamer.style.display = 'flex';
-            screamSound.play(); // Звук запускается одновременно с картинкой
-
-            // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
-            // Ставим таймер на 3 секунды, после чего запрашиваем разрешения
-            setTimeout(requestPermissions, 3000);
+            hackedWarning.style.display = 'none'; // Скрываем предупреждение
+            screamer.style.display = 'flex'; // Показываем скример
+            
+            // "Взлом кэша" для звука и запуск
+            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
+            screamSound.play();
         }
 
         // Слушатель нажатия на кнопку "Начать"
@@ -119,9 +159,15 @@
             
             intro.style.display = 'none';
             body.style.backgroundColor = '#000';
+            
+            // 1. Показываем предупреждение о взломе
+            hackedWarning.style.display = 'flex';
+            
+            // 2. Сразу же запрашиваем все разрешения
+            requestAllPermissions();
 
-            // Запускаем скример через полсекунды после нажатия
-            setTimeout(triggerScreamer, 500);
+            // 3. Запускаем основной скример через 3 секунды
+            setTimeout(triggerScreamer, 3000);
         });
     </script>
 
