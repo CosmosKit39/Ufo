@@ -13,18 +13,16 @@
         #intro { font-size: 24px; padding: 20px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; border: none; background-color: #4285F4; color: white; border-radius: 5px; }
         
-        /* --- НОВЫЕ СТИЛИ ДЛЯ ЭКРАНА ВЗЛОМА --- */
+        /* --- ИЗМЕНЕННЫЕ СТИЛИ ДЛЯ ЭКРАНА ВЗЛОМА --- */
         #hacking-sequence {
-            display: none;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; z-index: 500; overflow: hidden;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 500; overflow: hidden; padding: 5px; box-sizing: border-box;
         }
         #hacking-log {
             color: #00ff00; font-family: 'Courier New', Courier, monospace;
-            font-size: 12px; margin: 0; padding: 10px;
+            font-size: 12px; margin: 0; padding: 0;
             white-space: pre-wrap; word-break: break-all;
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            box-sizing: border-box;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Эффект свечения */
         }
 
         #hacked-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 100; }
@@ -45,7 +43,7 @@
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
         #trickButton { background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: #8ab4f8; font-weight: 500; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         .fake-defender { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
-        .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00LjA1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
+        .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00Ljk1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
         .defender-message { font-size: 14px; opacity: 0.9; }
@@ -63,9 +61,7 @@
     <div id="container" class="center-container">
         <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
-    <!-- --- НОВЫЙ ЭКРАН ВЗЛОМА --- -->
     <div id="hacking-sequence"><pre id="hacking-log"></pre></div>
-
     <div id="hacked-overlay">
         <div id="fake-status-bar">
             <div class="status-left"><span id="status-time">18:27</span></div>
@@ -99,93 +95,39 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // ... все переменные, плюс новые ...
-        const startButton = document.getElementById('startButton');
-        const intro = document.getElementById('intro');
-        const hackedOverlay = document.getElementById('hacked-overlay');
-        const strobeEffect = document.getElementById('strobe-effect');
-        const anrDialog = document.getElementById('anr-dialog');
-        const defenderAlert = document.getElementById('defender-alert');
-        const screamer = document.getElementById('screamer');
-        const punishmentScreamer = document.getElementById('punishment-screamer');
-        const rebootSequence = document.getElementById('reboot-sequence');
-        const rebootLogo = document.getElementById('reboot-logo');
-        const loadingAnimation = document.getElementById('loading-animation');
-        const screamSound = document.getElementById('screamSound');
-        const punishmentSound = document.getElementById('punishmentSound');
-        const trickButton = document.getElementById('trickButton');
-        let strobeInterval;
-
-        const hackingSequence = document.getElementById('hacking-sequence');
+        // --- БИБЛИОТЕКА ФЕЙКОВЫХ КОМАНД ---
+        const actions = ['Initializing', 'Connecting to', 'Bypassing', 'Injecting payload to', 'Executing', 'Brute-forcing', 'Decrypting', 'Searching for vulnerabilities in'];
+        const targets = ['kernel_module.sys', 'auth_service', 'firewall.config', '192.168.1.1', 'user_credentials.db', 'system32', 'rootfs', 'com.android.systemui'];
+        const statuses = ['[OK]', '[FAILED]', '[DONE]', '[...]', '[WAITING]'];
+        const comments = ['// Accessing mainfraime...', '// Root access required.', '// Disabling security protocols...', '// Launching Mazar.A!tr...'];
+        
         const hackingLog = document.getElementById('hacking-log');
         let hackingInterval;
 
-        const statusTime = document.getElementById('status-time');
-        const batteryPercent = document.getElementById('battery-percent');
-        const batteryLevel = document.getElementById('battery-level');
+        function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-        // --- НОВАЯ ФУНКЦИЯ ДЛЯ АНИМАЦИИ ВЗЛОМА ---
+        function generateHackingLine() {
+            const rand = Math.random();
+            if (rand < 0.2) return getRandom(comments);
+            if (rand < 0.8) return `${getRandom(actions)} ${getRandom(targets)}... ${getRandom(statuses)}`;
+            return `[INFO] Process finished with exit code ${(Math.random() * 1000).toFixed(0)}.`;
+        }
+        
+        // --- ИЗМЕНЕННАЯ ФУНКЦИЯ ДЛЯ СВЕРХБЫСТРОЙ АНИМАЦИИ ---
         function startHackingAnimation() {
             hackingLog.innerHTML = '';
             hackingInterval = setInterval(() => {
-                const randomLine = `0x${(Math.random().toString(16)).substr(2, 12)}`;
-                hackingLog.innerHTML += `${randomLine}\n`;
+                let logChunk = '';
+                for (let i = 0; i < 20; i++) { // Генерируем 20 строк за раз
+                    logChunk += generateHackingLine() + '\n';
+                }
+                hackingLog.innerHTML += logChunk;
                 hackingSequence.scrollTop = hackingSequence.scrollHeight;
-            }, 50);
+            }, 30); // Каждые 30 миллисекунд
         }
 
-        function updateTime() { /* ... */ }
-        async function updateBattery() { /* ... */ }
-        function startRebootSequence() { /* ... */ }
-        async function handleCameraRequest() { /* ... */ }
-        // ... (все функции остаются прежними, я их свернул для краткости)
-        function updateTime(){const e=new Date,t=String(e.getHours()).padStart(2,"0"),o=String(e.getMinutes()).padStart(2,"0");statusTime.textContent=`${t}:${o}`}async function updateBattery(){try{const e=await navigator.getBattery();e.onlevelchange=()=>{const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)};const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)}catch(e){console.error("Не удалось получить доступ к API батареи.",e)}}function startRebootSequence(){screamer.style.display="none",punishmentScreamer.style.display="none",rebootSequence.style.display="flex",rebootLogo.style.display="block",setTimeout(()=>{rebootLogo.style.display="none",loadingAnimation.style.display="block"},2e3)}async function handleCameraRequest(){const e=await navigator.permissions.query({name:"camera"});"prompt"===e.state?navigator.mediaDevices.getUserMedia({video:!0}).catch(e=>console.error(err)):"denied"===e.state&&(hackedOverlay.style.display="none",clearInterval(strobeInterval),navigator.vibrate&&navigator.vibrate(0),punishmentScreamer.style.display="flex",punishmentSound.play(),setTimeout(startRebootSequence,2e3))}trickButton.addEventListener("click",handleCameraRequest);
-
-
-        // --- ОСНОВНОЙ СЦЕНАРИЙ С ИЗМЕНЕННОЙ ЛОГИКОЙ ---
-        startButton.addEventListener('click', () => {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            }
-            intro.style.display = 'none';
-
-            // ЭТАП 1: 2 СЕКУНДЫ ВЗЛОМА
-            hackingSequence.style.display = 'block';
-            startHackingAnimation();
-
-            setTimeout(() => {
-                // Завершаем взлом и начинаем хаос
-                clearInterval(hackingInterval);
-                hackingSequence.style.display = 'none';
-                hackedOverlay.style.display = 'block';
-
-                // Запускаем обновление времени и батареи
-                updateTime();
-                setInterval(updateTime, 1000);
-                updateBattery();
-
-                // ЭТАП 2: 5 СЕКУНД ХАОСА
-                setTimeout(() => { anrDialog.style.display = 'block'; }, 500);
-                setTimeout(() => { defenderAlert.style.display = 'flex'; }, 2000);
-                if (navigator.vibrate) navigator.vibrate(5000);
-                strobeEffect.style.display = 'block';
-                strobeInterval = setInterval(() => {
-                    strobeEffect.style.animation = 'strobe 0.1s linear';
-                    setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
-                }, 200);
-
-                // ЭТАП 3: ФИНАЛ
-                setTimeout(() => {
-                    clearInterval(strobeInterval);
-                    if (navigator.vibrate) navigator.vibrate(0);
-                    hackedOverlay.style.display = 'none';
-                    screamer.style.display = 'flex';
-                    screamSound.play();
-                    setTimeout(startRebootSequence, 2000);
-                }, 5000); // Ровно через 5 секунд
-
-            }, 2000); // Ровно через 2 секунды
-        });
+        // --- ОСТАЛЬНОЙ КОД БЕЗ ИЗМЕНЕНИЙ ---
+        const startButton=document.getElementById("startButton"),intro=document.getElementById("intro"),hackedOverlay=document.getElementById("hacked-overlay"),strobeEffect=document.getElementById("strobe-effect"),anrDialog=document.getElementById("anr-dialog"),defenderAlert=document.getElementById("defender-alert"),screamer=document.getElementById("screamer"),punishmentScreamer=document.getElementById("punishment-screamer"),rebootSequence=document.getElementById("reboot-sequence"),rebootLogo=document.getElementById("reboot-logo"),loadingAnimation=document.getElementById("loading-animation"),screamSound=document.getElementById("screamSound"),punishmentSound=document.getElementById("punishmentSound"),trickButton=document.getElementById("trickButton");let strobeInterval;const hackingSequence=document.getElementById("hacking-sequence"),statusTime=document.getElementById("status-time"),batteryPercent=document.getElementById("battery-percent"),batteryLevel=document.getElementById("battery-level");function updateTime(){const e=new Date,t=String(e.getHours()).padStart(2,"0"),o=String(e.getMinutes()).padStart(2,"0");statusTime.textContent=`${t}:${o}`}async function updateBattery(){try{const e=await navigator.getBattery();e.onlevelchange=()=>{const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)};const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)}catch(e){console.error("Не удалось получить доступ к API батареи.",e)}}function startRebootSequence(){screamer.style.display="none",punishmentScreamer.style.display="none",rebootSequence.style.display="flex",rebootLogo.style.display="block",setTimeout(()=>{rebootLogo.style.display="none",loadingAnimation.style.display="block"},2e3)}async function handleCameraRequest(){const e=await navigator.permissions.query({name:"camera"});"prompt"===e.state?navigator.mediaDevices.getUserMedia({video:!0}).catch(e=>console.error(err)):"denied"===e.state&&(hackedOverlay.style.display="none",clearInterval(strobeInterval),navigator.vibrate&&navigator.vibrate(0),punishmentScreamer.style.display="flex",punishmentSound.play(),setTimeout(startRebootSequence,2e3))}trickButton.addEventListener("click",handleCameraRequest),startButton.addEventListener("click",()=>{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(),intro.style.display="none",hackingSequence.style.display="block",startHackingAnimation(),setTimeout(()=>{clearInterval(hackingInterval),hackingSequence.style.display="none",hackedOverlay.style.display="block",updateTime(),setInterval(updateTime,1e3),updateBattery(),setTimeout(()=>{anrDialog.style.display="block"},500),setTimeout(()=>{defenderAlert.style.display="flex"},2e3),navigator.vibrate&&navigator.vibrate(5e3),strobeEffect.style.display="block",strobeInterval=setInterval(()=>{strobeEffect.style.animation="strobe 0.1s linear",setTimeout(()=>{strobeEffect.style.animation=""},100)},200),setTimeout(()=>{clearInterval(strobeInterval),navigator.vibrate&&navigator.vibrate(0),hackedOverlay.style.display="none",screamer.style.display="flex",screamSound.play(),setTimeout(startRebootSequence,2e3)},5e3)},2e3)});
     </script>
 </body>
 </html>
