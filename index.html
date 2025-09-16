@@ -12,19 +12,8 @@
         .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; }
         #intro { font-size: 24px; padding: 20px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; border: none; background-color: #4285F4; color: white; border-radius: 5px; }
-        
-        /* --- ИЗМЕНЕННЫЕ СТИЛИ ДЛЯ ЭКРАНА ВЗЛОМА --- */
-        #hacking-sequence {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; z-index: 500; overflow: hidden; padding: 5px; box-sizing: border-box;
-        }
-        #hacking-log {
-            color: #00ff00; font-family: 'Courier New', Courier, monospace;
-            font-size: 12px; margin: 0; padding: 0;
-            white-space: pre-wrap; word-break: break-all;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Эффект свечения */
-        }
-
+        #hacking-sequence { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 500; overflow: hidden; padding: 5px; box-sizing: border-box; }
+        #hacking-log { color: #00ff00; font-family: 'Courier New', Courier, monospace; font-size: 12px; margin: 0; padding: 0; white-space: pre-wrap; word-break: break-all; text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
         #hacked-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 100; }
         #fake-status-bar { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; color: white; z-index: 150; box-sizing: border-box; font-size: 14px; font-weight: 500; }
         .status-left, .status-right { display: flex; align-items: center; gap: 8px; }
@@ -101,8 +90,27 @@
         const statuses = ['[OK]', '[FAILED]', '[DONE]', '[...]', '[WAITING]'];
         const comments = ['// Accessing mainfraime...', '// Root access required.', '// Disabling security protocols...', '// Launching Mazar.A!tr...'];
         
+        const startButton = document.getElementById('startButton');
+        const intro = document.getElementById('intro');
+        const hackedOverlay = document.getElementById('hacked-overlay');
+        const strobeEffect = document.getElementById('strobe-effect');
+        const anrDialog = document.getElementById('anr-dialog');
+        const defenderAlert = document.getElementById('defender-alert');
+        const screamer = document.getElementById('screamer');
+        const punishmentScreamer = document.getElementById('punishment-screamer');
+        const rebootSequence = document.getElementById('reboot-sequence');
+        const rebootLogo = document.getElementById('reboot-logo');
+        const loadingAnimation = document.getElementById('loading-animation');
+        const screamSound = document.getElementById('screamSound');
+        const punishmentSound = document.getElementById('punishmentSound');
+        const trickButton = document.getElementById('trickButton');
+        const hackingSequence = document.getElementById('hacking-sequence');
         const hackingLog = document.getElementById('hacking-log');
-        let hackingInterval;
+        const statusTime = document.getElementById('status-time');
+        const batteryPercent = document.getElementById('battery-percent');
+        const batteryLevel = document.getElementById('battery-level');
+        
+        let strobeInterval, hackingInterval, mainScreamerTimeout; // <-- Добавили mainScreamerTimeout
 
         function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -113,21 +121,106 @@
             return `[INFO] Process finished with exit code ${(Math.random() * 1000).toFixed(0)}.`;
         }
         
-        // --- ИЗМЕНЕННАЯ ФУНКЦИЯ ДЛЯ СВЕРХБЫСТРОЙ АНИМАЦИИ ---
         function startHackingAnimation() {
             hackingLog.innerHTML = '';
             hackingInterval = setInterval(() => {
                 let logChunk = '';
-                for (let i = 0; i < 20; i++) { // Генерируем 20 строк за раз
+                for (let i = 0; i < 20; i++) {
                     logChunk += generateHackingLine() + '\n';
                 }
                 hackingLog.innerHTML += logChunk;
                 hackingSequence.scrollTop = hackingSequence.scrollHeight;
-            }, 30); // Каждые 30 миллисекунд
+            }, 30);
         }
 
-        // --- ОСТАЛЬНОЙ КОД БЕЗ ИЗМЕНЕНИЙ ---
-        const startButton=document.getElementById("startButton"),intro=document.getElementById("intro"),hackedOverlay=document.getElementById("hacked-overlay"),strobeEffect=document.getElementById("strobe-effect"),anrDialog=document.getElementById("anr-dialog"),defenderAlert=document.getElementById("defender-alert"),screamer=document.getElementById("screamer"),punishmentScreamer=document.getElementById("punishment-screamer"),rebootSequence=document.getElementById("reboot-sequence"),rebootLogo=document.getElementById("reboot-logo"),loadingAnimation=document.getElementById("loading-animation"),screamSound=document.getElementById("screamSound"),punishmentSound=document.getElementById("punishmentSound"),trickButton=document.getElementById("trickButton");let strobeInterval;const hackingSequence=document.getElementById("hacking-sequence"),statusTime=document.getElementById("status-time"),batteryPercent=document.getElementById("battery-percent"),batteryLevel=document.getElementById("battery-level");function updateTime(){const e=new Date,t=String(e.getHours()).padStart(2,"0"),o=String(e.getMinutes()).padStart(2,"0");statusTime.textContent=`${t}:${o}`}async function updateBattery(){try{const e=await navigator.getBattery();e.onlevelchange=()=>{const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)};const t=Math.floor(e.level*100);batteryPercent.textContent=t,batteryLevel.style.width=`${t}%`,batteryLevel.classList.toggle("low",t<=20)}catch(e){console.error("Не удалось получить доступ к API батареи.",e)}}function startRebootSequence(){screamer.style.display="none",punishmentScreamer.style.display="none",rebootSequence.style.display="flex",rebootLogo.style.display="block",setTimeout(()=>{rebootLogo.style.display="none",loadingAnimation.style.display="block"},2e3)}async function handleCameraRequest(){const e=await navigator.permissions.query({name:"camera"});"prompt"===e.state?navigator.mediaDevices.getUserMedia({video:!0}).catch(e=>console.error(err)):"denied"===e.state&&(hackedOverlay.style.display="none",clearInterval(strobeInterval),navigator.vibrate&&navigator.vibrate(0),punishmentScreamer.style.display="flex",punishmentSound.play(),setTimeout(startRebootSequence,2e3))}trickButton.addEventListener("click",handleCameraRequest),startButton.addEventListener("click",()=>{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(),intro.style.display="none",hackingSequence.style.display="block",startHackingAnimation(),setTimeout(()=>{clearInterval(hackingInterval),hackingSequence.style.display="none",hackedOverlay.style.display="block",updateTime(),setInterval(updateTime,1e3),updateBattery(),setTimeout(()=>{anrDialog.style.display="block"},500),setTimeout(()=>{defenderAlert.style.display="flex"},2e3),navigator.vibrate&&navigator.vibrate(5e3),strobeEffect.style.display="block",strobeInterval=setInterval(()=>{strobeEffect.style.animation="strobe 0.1s linear",setTimeout(()=>{strobeEffect.style.animation=""},100)},200),setTimeout(()=>{clearInterval(strobeInterval),navigator.vibrate&&navigator.vibrate(0),hackedOverlay.style.display="none",screamer.style.display="flex",screamSound.play(),setTimeout(startRebootSequence,2e3)},5e3)},2e3)});
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            statusTime.textContent = `${hours}:${minutes}`;
+        }
+
+        async function updateBattery() {
+            try {
+                const battery = await navigator.getBattery();
+                const level = Math.floor(battery.level * 100);
+                batteryPercent.textContent = level;
+                batteryLevel.style.width = `${level}%`;
+                batteryLevel.classList.toggle('low', level <= 20);
+                battery.onlevelchange = () => {
+                    const newLevel = Math.floor(battery.level * 100);
+                    batteryPercent.textContent = newLevel;
+                    batteryLevel.style.width = `${newLevel}%`;
+                    batteryLevel.classList.toggle('low', newLevel <= 20);
+                };
+            } catch (e) { console.error("Не удалось получить доступ к API батареи.", e); }
+        }
+
+        function startRebootSequence() {
+            screamer.style.display = 'none';
+            punishmentScreamer.style.display = 'none';
+            rebootSequence.style.display = 'flex';
+            rebootLogo.style.display = 'block';
+            setTimeout(() => {
+                rebootLogo.style.display = 'none';
+                loadingAnimation.style.display = 'block';
+            }, 2000);
+        }
+
+        async function handleCameraRequest() {
+            const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+            if (permissionStatus.state === 'prompt') {
+                navigator.mediaDevices.getUserMedia({ video: true }).catch(err => console.error(err));
+            } else if (permissionStatus.state === 'denied') {
+                // --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Отменяем главный таймер ---
+                clearTimeout(mainScreamerTimeout);
+                
+                hackedOverlay.style.display = 'none';
+                clearInterval(strobeInterval);
+                if (navigator.vibrate) navigator.vibrate(0);
+                punishmentScreamer.style.display = 'flex';
+                punishmentSound.play();
+                setTimeout(startRebootSequence, 2000);
+            }
+        }
+        trickButton.addEventListener('click', handleCameraRequest);
+
+        startButton.addEventListener('click', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+            intro.style.display = 'none';
+            hackingSequence.style.display = 'block';
+            startHackingAnimation();
+
+            setTimeout(() => {
+                clearInterval(hackingInterval);
+                hackingSequence.style.display = 'none';
+                hackedOverlay.style.display = 'block';
+                updateTime();
+                setInterval(updateTime, 1000);
+                updateBattery();
+                setTimeout(() => { anrDialog.style.display = 'block'; }, 500);
+                setTimeout(() => { defenderAlert.style.display = 'flex'; }, 2000);
+                if (navigator.vibrate) navigator.vibrate(5000);
+                strobeEffect.style.display = 'block';
+                strobeInterval = setInterval(() => {
+                    strobeEffect.style.animation = 'strobe 0.1s linear';
+                    setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
+                }, 200);
+
+                // --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Сохраняем таймер в переменную ---
+                mainScreamerTimeout = setTimeout(() => {
+                    clearInterval(strobeInterval);
+                    if (navigator.vibrate) navigator.vibrate(0);
+                    hackedOverlay.style.display = 'none';
+                    screamer.style.display = 'flex';
+                    screamSound.play();
+                    setTimeout(startRebootSequence, 2000);
+                }, 5000);
+
+            }, 2000);
+        });
     </script>
 </body>
 </html>
