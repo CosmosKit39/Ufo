@@ -27,8 +27,6 @@
             font-size: 20px;
             cursor: pointer;
         }
-
-        /* --- СТИЛИ СКРИМЕРА --- */
         #screamer {
             display: none;
             position: fixed;
@@ -41,7 +39,6 @@
             align-items: center;
             flex-direction: column;
         }
-        
         #screamer-image {
             width: 80%;
             max-width: 600px;
@@ -51,10 +48,8 @@
             background-size: cover;
             background-position: center;
             border: 3px solid #300;
-            /* Подключаем анимации */
             animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite;
         }
-
         .glitch-text {
             position: relative;
             font-size: 4rem;
@@ -64,54 +59,14 @@
             margin-top: 20px;
             animation: glitch-main 1.5s infinite linear;
         }
-        
-        /* Анимация приближения */
-        @keyframes zoom-in {
-            from { transform: scale(1); }
-            to { transform: scale(1.15); }
-        }
-
-        /* Анимация тряски */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            25% { transform: translate(-1px, -2px) rotate(-1deg); }
-            50% { transform: translate(-3px, 0px) rotate(1deg); }
-            75% { transform: translate(3px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -1px) rotate(1deg); }
-        }
-
-        /* Анимация пульсации */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); }
-            50% { box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7); }
-            100% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); }
-        }
-        
-        /* Анимация для текста (не обязательно вникать, просто работает) */
-        .glitch-text::before,
-        .glitch-text::after {
-            content: "Я ТЕБЯ НАШЕЛ";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            overflow: hidden;
-        }
-        .glitch-text::before {
-            left: 2px;
-            text-shadow: -2px 0 #00f;
-            animation: glitch-1 2s infinite linear reverse;
-        }
-        .glitch-text::after {
-            left: -2px;
-            text-shadow: -2px 0 #f0f;
-            animation: glitch-2 2s infinite linear reverse;
-        }
+        @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.15); } }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-1px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } 50% { box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7); } 100% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } }
+        .glitch-text::before, .glitch-text::after { content: "Я ТЕБЯ НАШЕЛ"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        .glitch-text::before { left: 2px; text-shadow: -2px 0 #00f; animation: glitch-1 2s infinite linear reverse; }
+        .glitch-text::after { left: -2px; text-shadow: -2px 0 #f0f; animation: glitch-2 2s infinite linear reverse; }
         @keyframes glitch-1 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(0 0 95% 0); } 13%, 43%, 83% { clip-path: inset(5% 0 1% 0); } }
         @keyframes glitch-2 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(5% 0 91% 0); } 13%, 43%, 83% { clip-path: inset(0 0 5% 0); } }
-        
     </style>
 </head>
 <body>
@@ -128,7 +83,7 @@
         <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
     </div>
 
-    <audio id="screamSound" src="https://zvukipro.com/index.php?do=download&id=16936" preload="auto"></audio>
+    <audio id="screamSound" src="scream.mp3" loop preload="auto"></audio>
 
     <script>
         const startButton = document.getElementById('startButton');
@@ -137,27 +92,37 @@
         const screamSound = document.getElementById('screamSound');
         const body = document.body;
 
+        // Функция для запроса разрешений
+        function requestPermissions() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                    .then(stream => console.log('Доступ разрешен.'))
+                    .catch(err => console.error('Доступ отклонен:', err));
+            }
+        }
+
+        // Функция, которая запускает сам скример
+        function triggerScreamer() {
+            screamer.style.display = 'flex';
+            screamSound.play(); // Звук запускается одновременно с картинкой
+
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
+            // Ставим таймер на 3 секунды, после чего запрашиваем разрешения
+            setTimeout(requestPermissions, 3000);
+        }
+
+        // Слушатель нажатия на кнопку "Начать"
         startButton.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) {
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) {
-                document.documentElement.msRequestFullscreen();
             }
             
             intro.style.display = 'none';
             body.style.backgroundColor = '#000';
 
+            // Запускаем скример через полсекунды после нажатия
             setTimeout(triggerScreamer, 500);
         });
-
-        function triggerScreamer() {
-            screamer.style.display = 'flex'; // Изменено на flex для центрирования
-            screamSound.play();
-        }
     </script>
 
 </body>
