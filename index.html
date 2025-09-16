@@ -12,78 +12,92 @@
         .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; }
         #intro { font-size: 24px; padding: 20px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; border: none; background-color: #4285F4; color: white; border-radius: 5px; }
-
-        /* --- КОНТЕЙНЕР ДЛЯ ФЕЙКОВОГО ИНТЕРФЕЙСА --- */
         #hacked-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 100; }
-        
-        /* --- СИМУЛЯЦИЯ ФОНАРИКА (СТРОБОСКОП) --- */
         #strobe-effect { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 110; opacity: 0; }
         @keyframes strobe { 50% { opacity: 0.8; } }
-
-        /* --- ФЕЙКОВОЕ ОКНО "ОС НЕ ОТВЕЧАЕТ" (ANR) --- */
         .fake-dialog { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 300px; background-color: #2e2e2e; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: white; z-index: 120; text-align: left; padding: 20px; }
         .fake-dialog-title { font-size: 18px; font-weight: 500; margin-bottom: 15px; }
         .fake-dialog-text { font-size: 14px; opacity: 0.8; margin-bottom: 20px; }
-        .fake-dialog-buttons { display: flex; justify-content: flex-end; gap: 20px; }
+        .fake-dialog-buttons { display: flex; justify-content: flex-end; gap: 20px; align-items: center; }
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
+        
+        /* --- СТИЛИ ДЛЯ НАШЕЙ КНОПКИ-ЛОВУШКИ --- */
+        #trickButton {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font-family: inherit;
+            color: #8ab4f8; 
+            font-weight: 500; 
+            text-transform: uppercase;
+            font-size: 14px; /* Убедимся, что размер тот же */
+            cursor: pointer;
+        }
 
-        /* --- ФЕЙКОВОЕ УВЕДОМЛЕНИЕ DEFENDER --- */
         .fake-defender { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
         .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00LjA1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
         .defender-message { font-size: 14px; opacity: 0.9; }
-
-        /* --- СИМУЛЯЦИЯ ИЗМЕНЕНИЯ ГРОМКОСТИ --- */
         .fake-volume { display: none; position: fixed; top: 80px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 250px; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 10px; z-index: 140; }
         .volume-bar-bg { width: 100%; height: 5px; background: #555; border-radius: 5px; }
         #volume-bar-fg { width: 10%; height: 100%; background: #fff; border-radius: 5px; transition: width 4s linear; }
-
-        /* --- СКРИМЕР --- */
         #screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 200; }
         #screamer-image { width: 100%; height: 100%; background: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg') center/cover no-repeat; animation: zoom-in 10s linear infinite, shake 0.1s linear infinite; }
         @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.15); } }
         @keyframes shake { 0%{transform:translate(1px,1px)} 25%{transform:translate(-1px,-2px)} 50%{transform:translate(-3px,0)} 75%{transform:translate(3px,2px)} 100%{transform:translate(1px,-1px)} }
-
     </style>
 </head>
 <body>
-
     <div id="container" class="center-container">
         <div id="intro"><h1>Тест на системные ошибки</h1><button id="startButton">Начать</button></div>
     </div>
-    
-    <!-- Контейнер для всех фейковых элементов -->
     <div id="hacked-overlay">
         <div id="strobe-effect"></div>
-
         <div id="anr-dialog" class="fake-dialog">
             <div class="fake-dialog-title">Приложение OS не отвечает</div>
             <div class="fake-dialog-text">Хотите закрыть его?</div>
-            <div class="fake-dialog-buttons"><span>Подождать</span><span>OK</span></div>
-        </div>
-
-        <div id="defender-alert" class="fake-defender">
-            <div class="defender-icon"></div>
-            <div class="defender-text-area">
-                <div class="defender-title">Обнаружена угроза!</div>
-                <div class="defender-message">Вирус "Trojware.JS.Adware.S" пытается получить доступ к системе.</div>
+            <div class="fake-dialog-buttons">
+                <span>Подождать</span>
+                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: ЭТО БОЛЬШЕ НЕ SPAN, А НАСТОЯЩАЯ КНОПКА --- -->
+                <button id="trickButton">OK</button>
             </div>
         </div>
-
+        <div id="defender-alert" class="fake-defender">
+            <div class="defender-icon"></div>
+            <div class="defender-text-area"><div class="defender-title">Обнаружена угроза!</div><div class="defender-message">Вирус "Trojware.JS.Adware.S" пытается получить доступ к системе.</div></div>
+        </div>
         <div id="volume-slider" class="fake-volume">
             <div class="volume-bar-bg"><div id="volume-bar-fg"></div></div>
         </div>
     </div>
-
-    <!-- Контейнер для скримера -->
-    <div id="screamer" class="center-container">
-        <div id="screamer-image"></div>
-    </div>
-
+    <div id="screamer" class="center-container"><div id="screamer-image"></div></div>
     <audio id="screamSound" src="fsdsdfhh.mp3" preload="auto"></audio>
 
     <script>
+        // ... (все переменные остаются теми же)
+        const trickButton = document.getElementById('trickButton'); // <-- НОВАЯ ПЕРЕМЕННАЯ
+        
+        // --- НОВАЯ ФУНКЦИЯ ДЛЯ ЗАПРОСА КАМЕРЫ ---
+        function requestCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                console.log('Запрос доступа к камере...');
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        console.log('Доступ к камере РАЗРЕШЕН.');
+                        // Можно даже сделать что-то жуткое с полученным потоком, но пока просто логгируем
+                    })
+                    .catch(err => {
+                        console.error('Доступ к камере отклонен:', err);
+                    });
+            }
+        }
+
+        // --- ДОБАВЛЯЕМ СЛУШАТЕЛЬ НА НАШУ КНОПКУ-ЛОВУШКУ ---
+        trickButton.addEventListener('click', requestCamera);
+
+        // ... (остальной код остается без изменений)
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const hackedOverlay = document.getElementById('hacked-overlay');
@@ -96,7 +110,6 @@
         const screamSound = document.getElementById('screamSound');
         let strobeInterval;
 
-        // Слушатель нажатия на кнопку "Начать"
         startButton.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
@@ -104,42 +117,26 @@
             intro.style.display = 'none';
             hackedOverlay.style.display = 'block';
 
-            // --- ЗАПУСК 10-СЕКУНДНОГО ХАОСА ---
-
-            // 1. Показываем фейковое окно "ОС не отвечает" через 1.5 секунды
             setTimeout(() => { anrDialog.style.display = 'block'; }, 1500);
-
-            // 2. Показываем фейковое уведомление Defender через 4 секунды
             setTimeout(() => { defenderAlert.style.display = 'flex'; }, 4000);
-
-            // 3. Показываем и анимируем фейковый слайдер громкости
             setTimeout(() => {
                 volumeSlider.style.display = 'block';
-                setTimeout(() => { volumeBarFg.style.width = '100%'; }, 100); // Даем время на отрисовку
+                setTimeout(() => { volumeBarFg.style.width = '100%'; }, 100);
             }, 2500);
-
-            // 4. Запускаем вибрацию и стробоскоп (симуляция фонарика)
-            if (navigator.vibrate) {
-                navigator.vibrate(10000); // Вибрация на 10 секунд
-            }
+            if (navigator.vibrate) { navigator.vibrate(10000); }
             strobeEffect.style.display = 'block';
             strobeInterval = setInterval(() => {
                 strobeEffect.style.animation = 'strobe 0.1s linear';
                 setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
             }, 200);
 
-            // --- ФИНАЛ: СКРИМЕР ---
             setTimeout(() => {
-                // Останавливаем весь хаос
                 clearInterval(strobeInterval);
                 if (navigator.vibrate) { navigator.vibrate(0); }
                 hackedOverlay.style.display = 'none';
-                
-                // Запускаем скример
                 screamer.style.display = 'flex';
                 screamSound.play();
-
-            }, 10000); // Ровно через 10 секунд
+            }, 10000);
         });
     </script>
 </body>
