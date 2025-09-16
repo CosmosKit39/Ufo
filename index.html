@@ -30,8 +30,8 @@
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
         #trickButton { background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: #8ab4f8; font-weight: 500; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         
-        /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: УВЕДОМЛЕНИЕ ПОДНЯТО ВЫШЕ --- */
-        .fake-defender { display: none; position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
+        /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: УВЕДОМЛЕНИЕ ПОДНЯТО ЕЩЕ ВЫШЕ --- */
+        .fake-defender { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
         .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00LjA1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
@@ -70,7 +70,6 @@
             <div class="defender-icon"></div>
             <div class="defender-text-area">
                 <div class="defender-title">Обнаружена угроза!</div>
-                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: НАЗВАНИЕ И ТЕКСТ УГРОЗЫ --- -->
                 <div class="defender-message">Вирус "AndroidOS/Mazar.A!tr" пытается получить root-доступ.</div>
             </div>
         </div>
@@ -85,7 +84,6 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // ... все переменные ...
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const hackedOverlay = document.getElementById('hacked-overlay');
@@ -168,14 +166,16 @@
 
             setTimeout(() => { anrDialog.style.display = 'block'; }, 500);
             setTimeout(() => { defenderAlert.style.display = 'flex'; }, 2000);
-            // --- ШКАЛА ГРОМКОСТИ УДАЛЕНА ---
-            if (navigator.vibrate) navigator.vibrate(4000);
+            
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ: ВИБРАЦИЯ ДЛИТСЯ 5 СЕКУНД ---
+            if (navigator.vibrate) navigator.vibrate(5000);
             strobeEffect.style.display = 'block';
             strobeInterval = setInterval(() => {
                 strobeEffect.style.animation = 'strobe 0.1s linear';
                 setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
             }, 200);
 
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ: ОБЩЕЕ ВРЕМЯ 5 СЕКУНД ---
             setTimeout(() => {
                 clearInterval(strobeInterval);
                 if (navigator.vibrate) navigator.vibrate(0);
@@ -183,7 +183,7 @@
                 screamer.style.display = 'flex';
                 screamSound.play();
                 setTimeout(startRebootSequence, 2000);
-            }, 4000);
+            }, 5000);
         });
     </script>
 </body>
