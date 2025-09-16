@@ -32,7 +32,13 @@
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
         #trickButton { background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: #8ab4f8; font-weight: 500; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         .fake-defender { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
-        .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00Ljk1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
+        
+        /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИСПОЛЬЗУЕМ ВАШУ ИКОНКУ --- */
+        .defender-icon {
+            width: 40px; height: 40px; margin-right: 15px;
+            background: url('antivirus.png') center/contain no-repeat;
+        }
+
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
         .defender-message { font-size: 14px; opacity: 0.9; }
@@ -84,7 +90,7 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // --- БИБЛИОТЕКА ФЕЙКОВЫХ КОМАНД ---
+        // --- Весь JavaScript остается без изменений ---
         const actions = ['Initializing', 'Connecting to', 'Bypassing', 'Injecting payload to', 'Executing', 'Brute-forcing', 'Decrypting', 'Searching for vulnerabilities in'];
         const targets = ['kernel_module.sys', 'auth_service', 'firewall.config', '192.168.1.1', 'user_credentials.db', 'system32', 'rootfs', 'com.android.systemui'];
         const statuses = ['[OK]', '[FAILED]', '[DONE]', '[...]', '[WAITING]'];
@@ -110,7 +116,7 @@
         const batteryPercent = document.getElementById('battery-percent');
         const batteryLevel = document.getElementById('battery-level');
         
-        let strobeInterval, hackingInterval, mainScreamerTimeout; // <-- Добавили mainScreamerTimeout
+        let strobeInterval, hackingInterval, mainScreamerTimeout;
 
         function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -172,7 +178,6 @@
             if (permissionStatus.state === 'prompt') {
                 navigator.mediaDevices.getUserMedia({ video: true }).catch(err => console.error(err));
             } else if (permissionStatus.state === 'denied') {
-                // --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Отменяем главный таймер ---
                 clearTimeout(mainScreamerTimeout);
                 
                 hackedOverlay.style.display = 'none';
@@ -209,7 +214,6 @@
                     setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
                 }, 200);
 
-                // --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Сохраняем таймер в переменную ---
                 mainScreamerTimeout = setTimeout(() => {
                     clearInterval(strobeInterval);
                     if (navigator.vibrate) navigator.vibrate(0);
