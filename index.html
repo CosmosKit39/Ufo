@@ -7,7 +7,6 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>Интересный сайт</title>
-    <!-- Стили остаются без изменений -->
     <style>
         body { margin: 0; overflow: hidden; background-color: #f0f0f0; font-family: 'Roboto', Arial, sans-serif; }
         .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; }
@@ -29,75 +28,54 @@
         .defender-message { font-size: 14px; opacity: 0.9; }
         .fake-volume { display: none; position: fixed; top: 80px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 250px; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 10px; z-index: 140; }
         .volume-bar-bg { width: 100%; height: 5px; background: #555; border-radius: 5px; }
-        #volume-bar-fg { width: 10%; height: 100%; background: #fff; border-radius: 5px; transition: width 4s linear; }
-        #screamer, #punishment-screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 200; }
-        #screamer-image { width: 100%; height: 100%; background: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg') center/cover no-repeat; animation: zoom-in 10s linear infinite, shake 0.1s linear infinite; }
-        #punishment-screamer { z-index: 300; background-color: #900; color: white; }
-        #punishment-screamer h1 { font-size: 5rem; text-align: center; animation: shake 0.1s linear infinite; }
-        @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.15); } }
+        #volume-bar-fg { width: 10%; height: 100%; background: #fff; border-radius: 5px; transition: width 2s linear; }
+        #screamer, #punishment-screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 200; color: white; }
+        #screamer h1, #punishment-screamer h1 { font-size: 5rem; text-align: center; animation: shake 0.1s linear infinite; }
         @keyframes shake { 0%{transform:translate(1px,1px)} 25%{transform:translate(-1px,-2px)} 50%{transform:translate(-3px,0)} 75%{transform:translate(3px,2px)} 100%{transform:translate(1px,-1px)} }
+        
+        /* --- СТИЛИ ДЛЯ ПЕРЕЗАГРУЗКИ И ВЕЧНОЙ ЗАГРУЗКИ --- */
+        #reboot-sequence { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 400; }
+        #reboot-logo { display: none; font-size: 80px; color: white; animation: fade-in-out 2s ease-in-out; }
+        @keyframes fade-in-out { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        #loading-animation { display: none; width: 60px; height: 60px; border: 5px solid #444; border-top: 5px solid #fff; border-radius: 50%; animation: spin 1.5s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
-    <!-- HTML остается практически без изменений, добавляется только новый экран "наказания" -->
+
     <div id="container" class="center-container">
-        <div id="intro"><h1>Тест на системные ошибки</h1><button id="startButton">Начать</button></div>
+        <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
     <div id="hacked-overlay">
         <div id="strobe-effect"></div>
         <div id="anr-dialog" class="fake-dialog">
             <div class="fake-dialog-title">Приложение OS не отвечает</div>
             <div class="fake-dialog-text">Хотите закрыть его?</div>
-            <div class="fake-dialog-buttons">
-                <span>Подождать</span>
-                <button id="trickButton">OK</button>
-            </div>
+            <div class="fake-dialog-buttons"><span>Подождать</span><button id="trickButton">OK</button></div>
         </div>
         <div id="defender-alert" class="fake-defender">
             <div class="defender-icon"></div>
-            <div class="defender-text-area"><div class="defender-title">Обнаружена угроза!</div><div class="defender-message">Вирус "Trojware.JS.Adware.S" пытается получить доступ к системе.</div></div>
+            <div class="defender-text-area"><div class="defender-title">Обнаружена угроза!</div><div class="defender-message">Вирус "Trojware.JS.Adware.S" пытается получить доступ.</div></div>
         </div>
         <div id="volume-slider" class="fake-volume">
             <div class="volume-bar-bg"><div id="volume-bar-fg"></div></div>
         </div>
     </div>
-    <div id="screamer" class="center-container"><div id="screamer-image"></div></div>
-    <!-- --- НОВЫЙ СКРИМЕР-НАКАЗАНИЕ --- -->
+    <div id="screamer" class="center-container"><h1>Я ЗДЕСЬ</h1></div>
     <div id="punishment-screamer" class="center-container"><h1>ЗРЯ ТЫ ЭТО СДЕЛАЛ</h1></div>
+
+    <!-- --- НОВЫЙ ЭКРАН ПЕРЕЗАГРУЗКИ --- -->
+    <div id="reboot-sequence" class="center-container">
+        <div id="reboot-logo">G</div>
+        <div id="loading-animation"></div>
+    </div>
 
     <audio id="screamSound" src="fsdsdfhh.mp3" preload="auto"></audio>
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // Все переменные остаются теми же + новые
-        const trickButton = document.getElementById('trickButton');
-        const punishmentScreamer = document.getElementById('punishment-screamer');
-        const punishmentSound = document.getElementById('punishmentSound');
-
-        // --- ГЛАВНАЯ ИЗМЕНЕННАЯ ФУНКЦИЯ ---
-        async function handleCameraRequest() {
-            // Проверяем статус разрешения с помощью Permissions API
-            const permissionStatus = await navigator.permissions.query({ name: 'camera' });
-
-            if (permissionStatus.state === 'granted') {
-                // Если разрешение УЖЕ есть, ничего не делаем, просто логгируем
-                console.log('Доступ к камере уже был предоставлен.');
-            } else if (permissionStatus.state === 'prompt') {
-                // Если браузер ГОТОВ спросить, показываем стандартный запрос
-                console.log('Запрос доступа к камере...');
-                navigator.mediaDevices.getUserMedia({ video: true }).catch(err => console.error(err));
-            } else if (permissionStatus.state === 'denied') {
-                // ЕСЛИ ПОЛЬЗОВАТЕЛЬ УЖЕ ОТКАЗАЛ - ЗАПУСКАЕМ НАКАЗАНИЕ
-                console.log('Пользователь уже отказал в доступе. Запуск протокола наказания.');
-                hackedOverlay.style.display = 'none'; // Скрываем все
-                punishmentScreamer.style.display = 'flex'; // Показываем новый скример
-                punishmentSound.play(); // Включаем другой, более резкий звук
-            }
-        }
-        
-        trickButton.addEventListener('click', handleCameraRequest);
-
-        // ... остальной код не меняется ...
+        // ... все переменные ...
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const hackedOverlay = document.getElementById('hacked-overlay');
@@ -107,9 +85,44 @@
         const volumeSlider = document.getElementById('volume-slider');
         const volumeBarFg = document.getElementById('volume-bar-fg');
         const screamer = document.getElementById('screamer');
+        const punishmentScreamer = document.getElementById('punishment-screamer');
+        const rebootSequence = document.getElementById('reboot-sequence');
+        const rebootLogo = document.getElementById('reboot-logo');
+        const loadingAnimation = document.getElementById('loading-animation');
         const screamSound = document.getElementById('screamSound');
+        const punishmentSound = document.getElementById('punishmentSound');
+        const trickButton = document.getElementById('trickButton');
         let strobeInterval;
 
+        // Функция для запуска вечной перезагрузки
+        function startRebootSequence() {
+            screamer.style.display = 'none';
+            punishmentScreamer.style.display = 'none';
+            rebootSequence.style.display = 'flex';
+            rebootLogo.style.display = 'block';
+            setTimeout(() => {
+                rebootLogo.style.display = 'none';
+                loadingAnimation.style.display = 'block';
+            }, 2000); // Показываем лого "G" 2 секунды, потом вечную загрузку
+        }
+
+        // Ловушка для камеры
+        async function handleCameraRequest() {
+            const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+            if (permissionStatus.state === 'prompt') {
+                navigator.mediaDevices.getUserMedia({ video: true }).catch(err => console.error(err));
+            } else if (permissionStatus.state === 'denied') {
+                hackedOverlay.style.display = 'none';
+                clearInterval(strobeInterval); // Останавливаем хаос
+                if (navigator.vibrate) navigator.vibrate(0);
+                punishmentScreamer.style.display = 'flex';
+                punishmentSound.play();
+                setTimeout(startRebootSequence, 2000); // Через 2 сек наказания -> перезагрузка
+            }
+        }
+        trickButton.addEventListener('click', handleCameraRequest);
+
+        // Основной сценарий
         startButton.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
@@ -117,26 +130,33 @@
             intro.style.display = 'none';
             hackedOverlay.style.display = 'block';
 
-            setTimeout(() => { anrDialog.style.display = 'block'; }, 1500);
-            setTimeout(() => { defenderAlert.style.display = 'flex'; }, 4000);
+            // --- ЗАПУСК 4-СЕКУНДНОГО ХАОСА ---
+            setTimeout(() => { anrDialog.style.display = 'block'; }, 500);
+            setTimeout(() => { defenderAlert.style.display = 'flex'; }, 2000);
             setTimeout(() => {
                 volumeSlider.style.display = 'block';
                 setTimeout(() => { volumeBarFg.style.width = '100%'; }, 100);
-            }, 2500);
-            if (navigator.vibrate) { navigator.vibrate(10000); }
+            }, 1000);
+            if (navigator.vibrate) navigator.vibrate(4000);
             strobeEffect.style.display = 'block';
             strobeInterval = setInterval(() => {
                 strobeEffect.style.animation = 'strobe 0.1s linear';
                 setTimeout(() => { strobeEffect.style.animation = ''; }, 100);
             }, 200);
 
+            // --- ФИНАЛ: СКРИМЕР ---
             setTimeout(() => {
                 clearInterval(strobeInterval);
-                if (navigator.vibrate) { navigator.vibrate(0); }
+                if (navigator.vibrate) navigator.vibrate(0);
                 hackedOverlay.style.display = 'none';
+                
                 screamer.style.display = 'flex';
                 screamSound.play();
-            }, 10000);
+
+                // Через 2 сек скримера -> перезагрузка
+                setTimeout(startRebootSequence, 2000);
+
+            }, 4000); // Ровно через 4 секунды
         });
     </script>
 </body>
