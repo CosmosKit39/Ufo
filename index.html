@@ -32,13 +32,7 @@
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
         #trickButton { background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: #8ab4f8; font-weight: 500; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         .fake-defender { display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
-        
-        /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИСПОЛЬЗУЕМ ВАШУ ИКОНКУ --- */
-        .defender-icon {
-            width: 40px; height: 40px; margin-right: 15px;
-            background: url('antivirus.png') center/contain no-repeat;
-        }
-
+        .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('antivirus.png') center/contain no-repeat; }
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
         .defender-message { font-size: 14px; opacity: 0.9; }
@@ -46,7 +40,7 @@
         #screamer h1, #punishment-screamer h1 { font-size: 5rem; text-align: center; animation: shake 0.1s linear infinite; }
         @keyframes shake { 0%{transform:translate(1px,1px)} 25%{transform:translate(-1px,-2px)} 50%{transform:translate(-3px,0)} 75%{transform:translate(3px,2px)} 100%{transform:translate(1px,-1px)} }
         #reboot-sequence { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 400; }
-        #reboot-logo { display: none; width: 120px; animation: fade-in-out 2s ease-in-out; }
+        #reboot-logo { display: none; width: 120px; animation: fade-in-out 3s ease-in-out; } /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: Анимация теперь тоже 3 сек --- */
         @keyframes fade-in-out { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
         #loading-animation { display: none; width: 60px; height: 60px; border: 5px solid #444; border-top: 5px solid #fff; border-radius: 50%; animation: spin 1.5s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -90,7 +84,6 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // --- Весь JavaScript остается без изменений ---
         const actions = ['Initializing', 'Connecting to', 'Bypassing', 'Injecting payload to', 'Executing', 'Brute-forcing', 'Decrypting', 'Searching for vulnerabilities in'];
         const targets = ['kernel_module.sys', 'auth_service', 'firewall.config', '192.168.1.1', 'user_credentials.db', 'system32', 'rootfs', 'com.android.systemui'];
         const statuses = ['[OK]', '[FAILED]', '[DONE]', '[...]', '[WAITING]'];
@@ -167,10 +160,11 @@
             punishmentScreamer.style.display = 'none';
             rebootSequence.style.display = 'flex';
             rebootLogo.style.display = 'block';
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ: ЗАДЕРЖКА УВЕЛИЧЕНА ДО 3 СЕКУНД ---
             setTimeout(() => {
                 rebootLogo.style.display = 'none';
                 loadingAnimation.style.display = 'block';
-            }, 2000);
+            }, 3000);
         }
 
         async function handleCameraRequest() {
