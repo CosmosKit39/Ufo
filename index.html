@@ -5,77 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Интересный сайт</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #f0f0f0;
-            transition: background-color 0.5s;
-        }
-        .center-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        #intro {
-            font-size: 24px;
-        }
-        #startButton {
-            padding: 15px 30px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        
-        /* --- СТИЛИ ДЛЯ ПРЕДУПРЕЖДЕНИЯ --- */
-        #hacked-warning {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            color: #ff0000;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        #hacked-warning h1 {
-            font-size: 4rem;
-            text-shadow: 0 0 10px #ff0000;
-        }
-
-        /* --- СТИЛИ СКРИМЕРА --- */
-        #screamer {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-        }
-        #screamer-image {
-            width: 80%;
-            max-width: 600px;
-            height: 60%;
-            max-height: 450px;
-            background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg');
-            background-size: cover;
-            background-position: center;
-            border: 3px solid #300;
-            animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite;
-        }
-        .glitch-text {
-            position: relative;
-            font-size: 4rem;
-            font-weight: bold;
-            color: #ff0000;
-            font-family: 'Courier New', Courier, monospace;
-            margin-top: 20px;
-            animation: glitch-main 1.5s infinite linear;
-        }
+        body { margin: 0; overflow: hidden; background-color: #f0f0f0; transition: background-color 0.5s; }
+        .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; font-family: Arial, sans-serif; }
+        #intro { font-size: 24px; }
+        #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; }
+        #hacked-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; color: #00ff00; font-family: 'Courier New', Courier, monospace; }
+        #hacked-warning h1 { font-size: 4rem; text-shadow: 0 0 10px #00ff00; }
+        #screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; }
+        #screamer-image { width: 80%; max-width: 600px; height: 60%; max-height: 450px; background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg'); background-size: cover; background-position: center; border: 3px solid #300; animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite; }
+        .glitch-text { position: relative; font-size: 4rem; font-weight: bold; color: #ff0000; font-family: 'Courier New', Courier, monospace; margin-top: 20px; animation: glitch-main 1.5s infinite linear; }
         @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.15); } }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-1px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(1deg); } }
         @keyframes pulse { 0% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } 50% { box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7); } 100% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); } }
@@ -89,22 +27,14 @@
 <body>
 
     <div id="container" class="center-container">
-        <div id="intro">
-            <h1>Нажмите, чтобы увидеть кое-что интересное</h1>
-            <button id="startButton">Начать</button>
-        </div>
+        <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
-    
-    <div id="hacked-warning" class="center-container">
-        <h1>ВАС ВЗЛОМАЛИ</h1>
-    </div>
-
+    <div id="hacked-warning" class="center-container"><h1>Взлом 50%</h1></div>
     <div id="screamer" class="center-container">
         <div id="screamer-image"></div>
         <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
     </div>
 
-    <!-- ИСПРАВЛЕНО ИМЯ ФАЙЛА -->
     <audio id="screamSound" src="fsdsdfhh.mp3" loop preload="auto"></audio>
 
     <script>
@@ -113,42 +43,41 @@
         const screamer = document.getElementById('screamer');
         const screamSound = document.getElementById('screamSound');
         const hackedWarning = document.getElementById('hacked-warning');
-        const body = document.body;
 
-        // Функция для запроса всех разрешений по очереди
-        async function requestAllPermissions() {
+        // Функция, которая пытается запросить разрешения
+        async function requestPermissions() {
             try {
-                // 1. Запрос камеры
-                console.log('Запрос доступа к камере...');
-                await navigator.mediaDevices.getUserMedia({ video: true });
-                console.log('Доступ к камере получен.');
-                
-                // 2. Запрос микрофона
-                console.log('Запрос доступа к микрофону...');
-                await navigator.mediaDevices.getUserMedia({ audio: true });
-                console.log('Доступ к микрофону получен.');
-
-                // 3. Запрос датчиков движения (для мобильных устройств)
-                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                    console.log('Запрос доступа к датчикам...');
-                    const permissionState = await DeviceMotionEvent.requestPermission();
-                    if (permissionState === 'granted') {
-                        console.log('Доступ к датчикам получен.');
-                    }
+                // Браузер сгруппирует похожие запросы, но мы вызываем их подряд
+                for (let i = 0; i < 5; i++) {
+                    await navigator.mediaDevices.getUserMedia({ video: true });
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
                 }
             } catch (err) {
-                console.error('Пользователь отклонил запрос или произошла ошибка:', err);
+                console.error('Пользователь отклонил запрос:', err);
             }
+        }
+        
+        // Функция для зависания вкладки
+        function freezeBrowserTab() {
+            while (true) {}
+        }
+        
+        // Функция для показа финального уведомления и зависания
+        function showFinalAlertAndFreeze() {
+            alert("взлом 100%"); // Показываем alert
+            freezeBrowserTab(); // Этот код выполнится ПОСЛЕ нажатия "OK"
         }
 
         // Функция, которая запускает сам скример
         function triggerScreamer() {
-            hackedWarning.style.display = 'none'; // Скрываем предупреждение
-            screamer.style.display = 'flex'; // Показываем скример
+            hackedWarning.style.display = 'none';
+            screamer.style.display = 'flex';
             
-            // "Взлом кэша" для звука и запуск
-            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`;
+            screamSound.src = `fsdsdfhh.mp3?t=${new Date().getTime()}`; // Анти-кэш
             screamSound.play();
+            
+            // Через 1 секунду после показа скримера, вызываем финальное окно
+            setTimeout(showFinalAlertAndFreeze, 1000);
         }
 
         // Слушатель нажатия на кнопку "Начать"
@@ -158,16 +87,14 @@
             }
             
             intro.style.display = 'none';
-            body.style.backgroundColor = '#000';
+            document.body.style.backgroundColor = '#000';
             
-            // 1. Показываем предупреждение о взломе
+            // Этап 1: "Взлом 50%" и разрешения
             hackedWarning.style.display = 'flex';
-            
-            // 2. Сразу же запрашиваем все разрешения
-            requestAllPermissions();
+            requestPermissions(); // Запрашиваем разрешения
 
-            // 3. Запускаем основной скример через 3 секунды
-            setTimeout(triggerScreamer, 3000);
+            // Через 1 секунду переходим к Этапу 2 (Скример)
+            setTimeout(triggerScreamer, 1000);
         });
     </script>
 
