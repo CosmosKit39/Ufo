@@ -29,14 +29,14 @@
         .fake-dialog-buttons { display: flex; justify-content: flex-end; gap: 20px; align-items: center; }
         .fake-dialog-buttons span { color: #8ab4f8; font-weight: 500; text-transform: uppercase; }
         #trickButton { background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: #8ab4f8; font-weight: 500; text-transform: uppercase; font-size: 14px; cursor: pointer; }
-        .fake-defender { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
+        
+        /* --- ИЗМЕНЕНИЕ ЗДЕСЬ: УВЕДОМЛЕНИЕ ПОДНЯТО ВЫШЕ --- */
+        .fake-defender { display: none; position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 380px; background-color: #1e1e1e; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.7); color: white; z-index: 130; display: flex; align-items: center; padding: 12px; }
         .defender-icon { width: 40px; height: 40px; margin-right: 15px; background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGMDAwMCIgZD0iTTEyIDFDMy4xIDEgMSAzLjEgMSAxMnMyLjEgMTEgMTEgMTEgMTEtMi4xIDExLTExUzIwLjkgMSAxMiAxem0wIDIwYy00Ljk1IDAtOS00LjA1LTktOVMyLjA1IDMgNyAzczkgNC4wNSA5IDljMCA0Ljk1LTQuMDUgOS05IDl6bS0xLTVoMlY3aC0ydjZ6bTEgNGMtLjU1IDAtMS0uNDUtMS0xcy40NS0xIDEtMSAxIC40NSAxIDEgLjQ1IDEgMSAxek0xMyAxN2gtMlY3aDJ2MTB6Ii8+PC9zdmc+') center/contain no-repeat; transform: scale(1.5); }
         .defender-text-area { flex-grow: 1; }
         .defender-title { font-weight: bold; font-size: 16px; color: #ff4d4d; }
         .defender-message { font-size: 14px; opacity: 0.9; }
-        .fake-volume { display: none; position: fixed; top: 80px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 250px; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 10px; z-index: 140; }
-        .volume-bar-bg { width: 100%; height: 5px; background: #555; border-radius: 5px; }
-        #volume-bar-fg { width: 10%; height: 100%; background: #fff; border-radius: 5px; transition: width 2s linear; }
+        
         #screamer, #punishment-screamer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 200; color: white; }
         #screamer h1, #punishment-screamer h1 { font-size: 5rem; text-align: center; animation: shake 0.1s linear infinite; }
         @keyframes shake { 0%{transform:translate(1px,1px)} 25%{transform:translate(-1px,-2px)} 50%{transform:translate(-3px,0)} 75%{transform:translate(3px,2px)} 100%{transform:translate(1px,-1px)} }
@@ -53,21 +53,13 @@
     </div>
     <div id="hacked-overlay">
         <div id="fake-status-bar">
-            <div class="status-left">
-                <span id="status-time">18:27</span>
-            </div>
+            <div class="status-left"><span id="status-time">18:27</span></div>
             <div class="status-right">
-                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИКОНКА ИНТЕРНЕТА --- -->
                 <img src="https://cdn2.iconfinder.com/data/icons/fill-web-ui/32/network-256.png" class="status-icon" alt="signal">
-                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИКОНКА WIFI --- -->
                 <img src="https://global.discourse-cdn.com/balena/original/1X/a789e84903d90ff46602aaf88a7c272cefa1b3d3.png?v=5" class="status-icon" alt="wifi">
-                <div class="battery-container">
-                    <span id="battery-percent">25</span>
-                    <div class="battery-icon"><div id="battery-level"></div></div>
-                </div>
+                <div class="battery-container"><span id="battery-percent">25</span><div class="battery-icon"><div id="battery-level"></div></div></div>
             </div>
         </div>
-        
         <div id="strobe-effect"></div>
         <div id="anr-dialog" class="fake-dialog">
             <div class="fake-dialog-title">Приложение OS не отвечает</div>
@@ -76,10 +68,11 @@
         </div>
         <div id="defender-alert" class="fake-defender">
             <div class="defender-icon"></div>
-            <div class="defender-text-area"><div class="defender-title">Обнаружена угроза!</div><div class="defender-message">Вирус "Trojware.JS.Adware.S" пытается получить доступ.</div></div>
-        </div>
-        <div id="volume-slider" class="fake-volume">
-            <div class="volume-bar-bg"><div id="volume-bar-fg"></div></div>
+            <div class="defender-text-area">
+                <div class="defender-title">Обнаружена угроза!</div>
+                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: НАЗВАНИЕ И ТЕКСТ УГРОЗЫ --- -->
+                <div class="defender-message">Вирус "AndroidOS/Mazar.A!tr" пытается получить root-доступ.</div>
+            </div>
         </div>
     </div>
     <div id="screamer" class="center-container"><h1>Я ЗДЕСЬ</h1></div>
@@ -92,15 +85,13 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // ... Весь JavaScript остается без изменений ...
+        // ... все переменные ...
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const hackedOverlay = document.getElementById('hacked-overlay');
         const strobeEffect = document.getElementById('strobe-effect');
         const anrDialog = document.getElementById('anr-dialog');
         const defenderAlert = document.getElementById('defender-alert');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeBarFg = document.getElementById('volume-bar-fg');
         const screamer = document.getElementById('screamer');
         const punishmentScreamer = document.getElementById('punishment-screamer');
         const rebootSequence = document.getElementById('reboot-sequence');
@@ -129,16 +120,13 @@
                 batteryPercent.textContent = level;
                 batteryLevel.style.width = `${level}%`;
                 batteryLevel.classList.toggle('low', level <= 20);
-                
                 battery.onlevelchange = () => {
                     const newLevel = Math.floor(battery.level * 100);
                     batteryPercent.textContent = newLevel;
                     batteryLevel.style.width = `${newLevel}%`;
                     batteryLevel.classList.toggle('low', newLevel <= 20);
                 };
-            } catch (e) {
-                console.error("Не удалось получить доступ к API батареи.", e);
-            }
+            } catch (e) { console.error("Не удалось получить доступ к API батареи.", e); }
         }
 
         function startRebootSequence() {
@@ -180,10 +168,7 @@
 
             setTimeout(() => { anrDialog.style.display = 'block'; }, 500);
             setTimeout(() => { defenderAlert.style.display = 'flex'; }, 2000);
-            setTimeout(() => {
-                volumeSlider.style.display = 'block';
-                setTimeout(() => { volumeBarFg.style.width = '100%'; }, 100);
-            }, 1000);
+            // --- ШКАЛА ГРОМКОСТИ УДАЛЕНА ---
             if (navigator.vibrate) navigator.vibrate(4000);
             strobeEffect.style.display = 'block';
             strobeInterval = setInterval(() => {
