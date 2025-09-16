@@ -27,6 +27,8 @@
             font-size: 20px;
             cursor: pointer;
         }
+
+        /* --- СТИЛИ СКРИМЕРА --- */
         #screamer {
             display: none;
             position: fixed;
@@ -34,11 +36,82 @@
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: #000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #screamer-image {
+            width: 80%;
+            max-width: 600px;
+            height: 60%;
+            max-height: 450px;
             background-image: url('https://distribution.faceit-cdn.net/images/735d8f60-78fa-44ab-b6db-f42e2f0d9266.jpeg');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            border: 3px solid #300;
+            /* Подключаем анимации */
+            animation: zoom-in 10s linear infinite, shake 0.1s linear infinite, pulse 1s infinite;
         }
+
+        .glitch-text {
+            position: relative;
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff0000;
+            font-family: 'Courier New', Courier, monospace;
+            margin-top: 20px;
+            animation: glitch-main 1.5s infinite linear;
+        }
+        
+        /* Анимация приближения */
+        @keyframes zoom-in {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+
+        /* Анимация тряски */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            25% { transform: translate(-1px, -2px) rotate(-1deg); }
+            50% { transform: translate(-3px, 0px) rotate(1deg); }
+            75% { transform: translate(3px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -1px) rotate(1deg); }
+        }
+
+        /* Анимация пульсации */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7); }
+            100% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.4); }
+        }
+        
+        /* Анимация для текста (не обязательно вникать, просто работает) */
+        .glitch-text::before,
+        .glitch-text::after {
+            content: "Я ТЕБЯ НАШЕЛ";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #00f;
+            animation: glitch-1 2s infinite linear reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #f0f;
+            animation: glitch-2 2s infinite linear reverse;
+        }
+        @keyframes glitch-1 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(0 0 95% 0); } 13%, 43%, 83% { clip-path: inset(5% 0 1% 0); } }
+        @keyframes glitch-2 { 0%, 12%, 15%, 42%, 45%, 82%, 85%, 100% { clip-path: inset(5% 0 91% 0); } 13%, 43%, 83% { clip-path: inset(0 0 5% 0); } }
+        
     </style>
 </head>
 <body>
@@ -50,7 +123,10 @@
         </div>
     </div>
 
-    <div id="screamer"></div>
+    <div id="screamer">
+        <div id="screamer-image"></div>
+        <h2 class="glitch-text">Я ТЕБЯ НАШЕЛ</h2>
+    </div>
 
     <audio id="screamSound" src="https://zvukipro.com/index.php?do=download&id=16936" preload="auto"></audio>
 
@@ -64,24 +140,22 @@
         startButton.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+            } else if (document.documentElement.mozRequestFullScreen) {
                 document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            } else if (document.documentElement.webkitRequestFullscreen) {
                 document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            } else if (document.documentElement.msRequestFullscreen) {
                 document.documentElement.msRequestFullscreen();
             }
             
             intro.style.display = 'none';
+            body.style.backgroundColor = '#000';
 
-            // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
-            // Запускаем скример с задержкой в 500 миллисекунд (0.5 секунды)
             setTimeout(triggerScreamer, 500);
         });
 
         function triggerScreamer() {
-            body.style.backgroundColor = '#000';
-            screamer.style.display = 'block';
+            screamer.style.display = 'flex'; // Изменено на flex для центрирования
             screamSound.play();
         }
     </script>
