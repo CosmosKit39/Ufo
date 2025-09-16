@@ -12,17 +12,8 @@
         .center-container { display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh; text-align: center; }
         #intro { font-size: 24px; padding: 20px; }
         #startButton { padding: 15px 30px; font-size: 20px; cursor: pointer; border: none; background-color: #4285F4; color: white; border-radius: 5px; }
-
-        /* --- КОНТЕЙНЕР ДЛЯ ФЕЙКОВОГО ИНТЕРФЕЙСА --- */
         #hacked-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 100; }
-        
-        /* --- НОВАЯ ФЕЙКОВАЯ СТРОКА СОСТОЯНИЯ --- */
-        #fake-status-bar {
-            position: fixed; top: 0; left: 0; width: 100%;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; color: white; z-index: 150; box-sizing: border-box;
-            font-size: 14px; font-weight: 500;
-        }
+        #fake-status-bar { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; color: white; z-index: 150; box-sizing: border-box; font-size: 14px; font-weight: 500; }
         .status-left, .status-right { display: flex; align-items: center; gap: 8px; }
         .status-icon { width: 18px; height: 18px; opacity: 0.9; }
         .battery-container { display: flex; align-items: center; gap: 5px; }
@@ -30,7 +21,6 @@
         .battery-icon::after { content: ''; position: absolute; right: -4px; top: 2px; width: 2px; height: 5px; background: white; border-radius: 0 1px 1px 0; }
         #battery-level { height: 100%; background: white; border-radius: 1px; transition: width 0.5s; }
         #battery-level.low { background: #ff4d4d; }
-
         #strobe-effect { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 110; opacity: 0; }
         @keyframes strobe { 50% { opacity: 0.8; } }
         .fake-dialog { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 300px; background-color: #2e2e2e; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: white; z-index: 120; text-align: left; padding: 20px; }
@@ -62,14 +52,15 @@
         <div id="intro"><h1>Нажмите, чтобы увидеть кое-что интересное</h1><button id="startButton">Начать</button></div>
     </div>
     <div id="hacked-overlay">
-        <!-- --- НОВАЯ СТРОКА СОСТОЯНИЯ --- -->
         <div id="fake-status-bar">
             <div class="status-left">
                 <span id="status-time">18:27</span>
             </div>
             <div class="status-right">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTUgMTloMTMuNUExLjUgMS41IDAgMCAwIDIwIDE3LjV2LTExQTEuNSAxLjUgMCAwIDAgMTguNSAxLjVINUEzLjUgMy41IDAgMCAwIDEuNSA1djExQTEuNSAxLjUgMCAwIDAgMyA3LjVoMCIvPjwvc3ZnPg==" class="status-icon" alt="signal">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTUgMTJoMy4zOEEzIDMgMCAwIDEgMTEgMTQuNlYxNSIvPjxwYXRoIGQ9Ik04LjUgMTJoMi41M0EzIDMgMCAwIDEgMTMuNSA5LjNWOSIvPjxwYXRoIGQ9Ik0xMiAxMmg0LjQ1QTQgNCAwIDAgMCAyMCA4di0uNUMyMCA2LjEyIDE4Ljg4IDUgMTcuNSA1SDciLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjE4IiByPSIxIi8+PC9zdmc+" class="status-icon" alt="wifi">
+                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИКОНКА ИНТЕРНЕТА --- -->
+                <img src="https://cdn2.iconfinder.com/data/icons/fill-web-ui/32/network-256.png" class="status-icon" alt="signal">
+                <!-- --- ИЗМЕНЕНИЕ ЗДЕСЬ: ИКОНКА WIFI --- -->
+                <img src="https://global.discourse-cdn.com/balena/original/1X/a789e84903d90ff46602aaf88a7c272cefa1b3d3.png?v=5" class="status-icon" alt="wifi">
                 <div class="battery-container">
                     <span id="battery-percent">25</span>
                     <div class="battery-icon"><div id="battery-level"></div></div>
@@ -101,7 +92,7 @@
     <audio id="punishmentSound" src="https://www.myinstants.com/media/sounds/metal-pipe-falling-sound.mp3" preload="auto"></audio>
 
     <script>
-        // ... все переменные ...
+        // ... Весь JavaScript остается без изменений ...
         const startButton = document.getElementById('startButton');
         const intro = document.getElementById('intro');
         const hackedOverlay = document.getElementById('hacked-overlay');
@@ -120,7 +111,6 @@
         const trickButton = document.getElementById('trickButton');
         let strobeInterval;
 
-        // --- НОВЫЕ ПЕРЕМЕННЫЕ И ФУНКЦИИ ДЛЯ СТРОКИ СОСТОЯНИЯ ---
         const statusTime = document.getElementById('status-time');
         const batteryPercent = document.getElementById('battery-percent');
         const batteryLevel = document.getElementById('battery-level');
@@ -151,7 +141,6 @@
             }
         }
 
-        // --- ОСТАЛЬНОЙ КОД ---
         function startRebootSequence() {
             screamer.style.display = 'none';
             punishmentScreamer.style.display = 'none';
@@ -185,7 +174,6 @@
             intro.style.display = 'none';
             hackedOverlay.style.display = 'block';
 
-            // Запускаем обновление времени и батареи
             updateTime();
             setInterval(updateTime, 1000);
             updateBattery();
